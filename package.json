@@ -1,0 +1,22 @@
+{
+  "name": "aws-sdk-hands-on",
+  "version": "0.0.1",
+  "description": "Hands-on AWS Node.js SDK",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"No test\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tgknight/aws-sdk-hands-on.git"
+  },
+  "author": "Thanapat Bhunnachet",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tgknight/aws-sdk-hands-on/issues"
+  },
+  "homepage": "https://github.com/tgknight/aws-sdk-hands-on#readme",
+  "dependencies": {
+    "aws-sdk": "^2.2.42"
+  }
+}
