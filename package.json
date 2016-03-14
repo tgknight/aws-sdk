@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/tgknight/aws-sdk-hands-on#readme",
   "dependencies": {
-    "aws-sdk": "^2.2.42"
+    "async": "^1.5.2",
+    "aws-sdk": "^2.2.42",
+    "bluebird": "^3.3.4"
   }
 }
