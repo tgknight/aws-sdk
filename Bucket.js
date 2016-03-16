@@ -13,39 +13,31 @@ function Bucket (region) {
 
 /*
  * params: {name, region}
+ * callback: function
  */
-Bucket.prototype.create = function (params) {
-  return s3.createBucket({
+Bucket.prototype.create = function (params, callback) {
+  var bucketParams = {
     Bucket: params.name,
     CreateBucketConfiguration: {
       LocationConstraint: params.region
     }
-  }, function (err, data) {
-    if (err) {
-      return { err: err }
-    } else {
-      return { data: data }
-    }
-  })
+  }
+  return s3.createBucket(bucketParams, callback)
 }
+
 
 /*
  * params: {bucket, name, data}
+ * callback: function
  */
-Bucket.prototype.upload = function (params) {
+Bucket.prototype.upload = function (params, callback) {
   var uploadParams = {
     Bucket: params.bucket,
     Key: params.name,
     Body: params.data
   }
 
-  return s3.putObject(uploadParams, function (err, data) {
-    if (err) {
-      return { err: err }
-    } else {
-      return { data: data }
-    }
-  })
+  return s3.putObject(uploadParams, callback)
 }
 
 module.exports = Bucket

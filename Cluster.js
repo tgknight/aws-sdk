@@ -13,8 +13,9 @@ function Cluster (region) {
 
 /**
  * params: { name, zone, keyName, masterInstanceType, slaveInstanceType }
+ * callback: function
  */
-Cluster.prototype.create = function (params) {
+Cluster.prototype.create = function (params, callback) {
   var jobFlowParams = {
     Instances: {
       Ec2KeyName: params.keyName,
@@ -46,37 +47,19 @@ Cluster.prototype.create = function (params) {
     VisibleToAllUsers: true
   }
 
-  return emr.runJobFlow(jobFlowParams, function (err, data) {
-    if (err) {
-      return { err: err }
-    } else {
-      return { data: data.JobFlowId }
-    }
-  })
+  return emr.runJobFlow(jobFlowParams, callback)
 }
 
-Cluster.prototype.delete = function (jobFlowId) {
+Cluster.prototype.delete = function (jobFlowId, callback) {
   return emr.terminateJobFlows({
     JobFlowIds: [ jobFlowId ]
-  }, function (err, data) {
-    if (err) {
-      return { err: err }
-    } else {
-      return { data: data }
-    }
-  })
+  }, callback)
 }
 
-Cluster.prototype.getClusterInfo = function (jobFlowId) {
+Cluster.prototype.getClusterInfo = function (jobFlowId, callback) {
   return emr.describeCluster({
     ClusterId: jobFlowId
-  }, function (err, data) {
-    if (err) {
-      return { err: err }
-    } else {
-      return { data: data }
-    }
-  })
+  }, callback)
 }
 
 module.exports = Cluster
