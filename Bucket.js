@@ -25,7 +25,6 @@ Bucket.prototype.create = function (params, callback) {
   return s3.createBucket(bucketParams, callback)
 }
 
-
 /*
  * params: {bucket, name, data}
  * callback: function

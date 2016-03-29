@@ -24,11 +24,11 @@ async.series([
       }
     })
   },
-  function (cb) {
+  /*function (cb) {
     bucket.upload({
       bucket: bucketName,
-      name: 'data/test.txt',
-      data: 'test uploading'
+      name: 'temp/hellos3.py',
+      data: 'print "hello from s3"'
     }, function (err, data) {
       if (err) {
         cb(err, null)
@@ -36,12 +36,12 @@ async.series([
         cb(null, data)
       }
     })
-  },
+  },*/
   function (cb) {
     cluster.create({
       name: bucketName,
       zone: region + 'a',
-      keyname: 'top',
+      keyName: 'top',
       masterInstanceType: 'm3.xlarge',
       slaveInstanceType: 'm3.xlarge'
     }, function (err, data) {
@@ -54,7 +54,7 @@ async.series([
     })
   },
   function (cb) {
-    var jobStatus
+    var jobStatus, count = 0
     async.until(
       function () { return jobStatus === 'WAITING' },
       function (callback) {
@@ -65,7 +65,7 @@ async.series([
                 callback(err, null)
               } else {
                 jobStatus = data.Cluster.Status.State
-                console.log('Cluster status: ' + jobStatus)
+                process.stdout.write('Cluster status: ' + jobStatus + ' #' + ++count + '\r')
                 callback(null, data)
               }
             })
