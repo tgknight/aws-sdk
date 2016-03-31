@@ -13,47 +13,6 @@ function Network (region) {
 }
 
 // params: { CidrBlock }
-Network.prototype.test = function (params) {
-  _async.waterfall([
-    function (callback) {
-      ec2.createVpc({ CidrBlock: params.CidrBlock }, function (err, data) {
-        if (err) callback(err, null)
-        else {
-          callback(null, {
-            CidrBlock: data.Vpc.CidrBlock,
-            VpcId: data.Vpc.VpcId
-          })
-        }
-      })
-    },
-    function (params, callback) {
-      console.log(params)
-      var filter = [{ Name: 'vpc-id', Values: [ params.VpcId ] }]
-      _async.parallel([
-        function (callback) {
-          ec2.describeNetworkInterfaces({ Filters: filter }, function (err, data) {
-            if (err) callback(err, null)
-            else callback(null, data)
-          })
-        },
-        function (callback) {
-          ec2.describeRouteTables({ Filters: filter }, function (err, data) {
-            if (err) callback(err, null)
-            else callback(null, data.RouteTables[0].RouteTableId)
-          })
-        }
-      ], function (err, results) {
-        if (err) callback(err, null)
-        else callback(null, results)
-      })
-    }
-  ], function (err, results) {
-    if (err) console.log(err)
-    else console.log(results)
-  })
-}
-
-// params: { CidrBlock }
 // return: { CidrBlock, VpcId }
 Network.stepOne = function (params, callback) {
   _async.parallel([
@@ -260,20 +219,15 @@ Network.stepFour = function (params, callback) {
   })
 }
 
-Network.prototype.initNetwork = function (params) {
+Network.prototype.initNetwork = function (params, callback) {
   _async.waterfall([
     _async.apply(Network.stepOne, params),
     Network.stepTwo,
     Network.stepThree,
     Network.stepFour
   ], function (err, result) {
-    if (err) {
-      console.log(err)
-      return err
-    } else {
-      console.log(result)
-      return result
-    }
+    if (err) callback(err, null)
+    else callback(null, result)
   })
 }
 
