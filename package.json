@@ -19,7 +19,7 @@
   "dependencies": {
     "async": "^1.5.2",
     "aws-sdk": "^2.2.42",
-    "base64-js": "^1.1.2",
+    "base64it": "^1.1.0",
     "bluebird": "^3.3.4",
     "lodash": "^4.6.1"
   }

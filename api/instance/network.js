@@ -18,7 +18,6 @@ Network.stepOne = function (params, callback) {
   _async.parallel([
     function (callback) {
       ec2.createVpc({ CidrBlock: params.CidrBlock }, function (err, data) {
-        if (err) console.log('createVpc')
         if (err) callback(err, null)
         else {
           callback(null, {
@@ -30,7 +29,6 @@ Network.stepOne = function (params, callback) {
     },
     function (callback) {
       ec2.createInternetGateway(function (err, data) {
-        if (err) console.log('createInternetGateway')
         if (err) callback(err, null)
         else callback(null, data.InternetGateway.InternetGatewayId)
       })
@@ -56,7 +54,6 @@ Network.stepTwo = function (params, callback) {
         CidrBlock: params.CidrBlock,
         VpcId: params.VpcId
       }, function (err, data) {
-        if (err) console.log('createSubnet')
         if (err) callback(err, null)
         else callback(null, data.Subnet.SubnetId)
       })
@@ -67,7 +64,6 @@ Network.stepTwo = function (params, callback) {
         GroupName: 'datana-' + new Date().getTime(),
         VpcId: params.VpcId
       }, function (err, data) {
-        if (err) console.log('createSecurityGroup')
         if (err) callback(err, null)
         else callback(null, data.GroupId)
       })
@@ -79,7 +75,6 @@ Network.stepTwo = function (params, callback) {
           Values: [ params.VpcId ]
         }]
       }, function (err, data) {
-        if (err) console.log('createRouteTable')
         if (err) callback(err, null)
         else callback(null, data.RouteTables[0].RouteTableId)
       })
@@ -89,7 +84,6 @@ Network.stepTwo = function (params, callback) {
         InternetGatewayId: params.InternetGatewayId,
         VpcId: params.VpcId
       }, function (err, data) {
-        if (err) console.log('attachInternetGateway')
         if (err) callback(err, null)
         else callback(null, data)
       })
@@ -118,7 +112,6 @@ Network.stepThree = function (params, callback) {
         RouteTableId: params.RouteTableId,
         GatewayId: params.InternetGatewayId
       }, function (err, data) {
-        if (err) console.log('createRoute')
         if (err) callback(err, null)
         else callback(null, data.Return)
       })
@@ -128,14 +121,13 @@ Network.stepThree = function (params, callback) {
         RouteTableId: params.RouteTableId,
         SubnetId: params.SubnetId
       }, function (err, data) {
-        if (err) console.log('associateRouteTable')
+        if (err) console.log('asociateRouteTable')
         if (err) callback(err, null)
         else callback(err, data.AssociationId)
       })
     },
     function (callback) {
       ec2.allocateAddress({ Domain: 'vpc' }, function (err, data) {
-        if (err) console.log('allocateAddress')
         if (err) callback(err, null)
         else {
           callback(null, {
@@ -150,7 +142,6 @@ Network.stepThree = function (params, callback) {
         SubnetId: params.SubnetId,
         Groups: [ params.SecurityGroupId ]
       }, function (err, data) {
-        if (err) console.log('createNetworkInterface')
         if (err) callback(err, null)
         else callback(null, data.NetworkInterface.NetworkInterfaceId)
       })
@@ -192,7 +183,6 @@ Network.stepFour = function (params, callback) {
           IpRanges: [{ CidrIp: '0.0.0.0/0' }]
         }]
       }, function (err, data) {
-        if (err) console.log('authorizeSecurityGroupIngress')
         if (err) callback(err, null)
         else callback(null, data)
       })
@@ -202,7 +192,6 @@ Network.stepFour = function (params, callback) {
         AllocationId: params.AllocationId,
         NetworkInterfaceId: params.NetworkInterfaceId
       }, function (err, data) {
-        if (err) console.log('associateAddress')
         if (err) callback(err, null)
         else callback(null, data.AssociationId)
       })
